@@ -31,6 +31,7 @@ namespace AutorestOrchestratorClient
             ServicePointManager.DefaultConnectionLimit = 100;
             RobotsClient robotsClient = new RobotsClient(api2);
 
+            await robotsClient.SaveEnvironmentsToJsonFiles(@"C:\Users\eugen.cutic\Desktop\Environments.txt");
         }  
     }
 }

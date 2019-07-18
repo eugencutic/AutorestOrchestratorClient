@@ -1,6 +1,8 @@
 ﻿using AutorestOrchestratorClient.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -112,9 +114,17 @@ namespace AutorestOrchestratorClient
             }
         }
 
-        public async Task SaveEnvironmentsToJsonFiles()
+        public async Task SaveEnvironmentsToJsonFiles(string path)
         {
-
+            var environments = await api.Environments.GetEnvironmentsAsync(expand: "Robots");
+            foreach (var env in environments.Value)
+            {
+                using (var file = File.CreateText(path))
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Serialize(file, env);
+                }
+            }
         }
     }
 }
