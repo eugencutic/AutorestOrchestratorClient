@@ -6,6 +6,7 @@ using AutorestOrchestratorClient.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net;
 
 namespace AutorestOrchestratorClient
 {
@@ -27,14 +28,24 @@ namespace AutorestOrchestratorClient
 
             var api2 = new UiPathWebApi(new TokenCredentials(token), _client, false);
 
+            ServicePointManager.DefaultConnectionLimit = 100;
             RobotsClient robotsClient = new RobotsClient(api2);
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            await robotsClient.ProvisionDummyRobots(3000);
+            var robots = await robotsClient.ProvisionDummyRobots(3000);
             sw.Stop();
 
-            Console.WriteLine(sw.Elapsed);
+            Console.WriteLine($"Robots provisioned in {sw.Elapsed}.");
+
+            sw.Restart();
+            
+            await robotsClient.AssignDummyRobotsToEnvironments(robots);
+            sw.Stop();
+
+            Console.WriteLine($"Robots assigned in {sw.Elapsed}.");
+
+            //await robotsClient.CleanUp(4066);
         }  
     }
 }
