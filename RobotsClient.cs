@@ -81,5 +81,40 @@ namespace AutorestOrchestratorClient
                 await Task.WhenAll(tasks);
             }
         }
+
+        public async Task ListRobotsToConsole(int pageSize)
+        {
+            var robotsShown = 0;
+            var show = true;
+
+            while(show)
+            {
+                Console.WriteLine("Enter: Show next page / Esc: Exit");
+                var key = Console.ReadKey();
+                if (key.Key.Equals(ConsoleKey.Escape))
+                {
+                    show = false;
+                }
+                if (key.Key.Equals(ConsoleKey.Enter))
+                {
+                    var robots = await api.Robots.GetRobotsAsync(null, null, null, null, pageSize, robotsShown, false);
+                    if(robots.Value.Count == 0)
+                    {
+                        Console.WriteLine("All robots shown.");
+                        show = false;
+                    }
+                    robotsShown += pageSize;
+                    foreach (var robot in robots.Value)
+                    {
+                        Console.WriteLine(robot.Name);
+                    }
+                }
+            }
+        }
+
+        public async Task SaveEnvironmentsToJsonFiles()
+        {
+
+        }
     }
 }

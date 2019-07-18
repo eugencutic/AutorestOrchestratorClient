@@ -30,22 +30,7 @@ namespace AutorestOrchestratorClient
 
             ServicePointManager.DefaultConnectionLimit = 100;
             RobotsClient robotsClient = new RobotsClient(api2);
-            Stopwatch sw = new Stopwatch();
 
-            sw.Start();
-            var robots = await robotsClient.ProvisionDummyRobots(3000);
-            sw.Stop();
-
-            Console.WriteLine($"Robots provisioned in {sw.Elapsed}.");
-
-            sw.Restart();
-            
-            await robotsClient.AssignDummyRobotsToEnvironments(robots);
-            sw.Stop();
-
-            Console.WriteLine($"Robots assigned in {sw.Elapsed}.");
-
-            //await robotsClient.CleanUp(4066);
         }  
     }
 }
