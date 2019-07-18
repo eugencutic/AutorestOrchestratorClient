@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutorestOrchestratorClient.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace AutorestOrchestratorClient
 {
@@ -26,9 +27,14 @@ namespace AutorestOrchestratorClient
 
             var api2 = new UiPathWebApi(new TokenCredentials(token), _client, false);
 
-            var robot = new RobotDto("Dummy", "uipath\\eugen.cutic", RobotDtoType.Attended, RobotDtoHostingType.Floating);
-            var robotResponse = await api2.Robots.PostAsync(robot);
-            
+            RobotsClient robotsClient = new RobotsClient(api2);
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+            await robotsClient.ProvisionDummyRobots(3000);
+            sw.Stop();
+
+            Console.WriteLine(sw.Elapsed);
         }  
     }
 }
